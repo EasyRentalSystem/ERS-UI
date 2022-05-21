@@ -19,49 +19,10 @@ reader = easyocr.Reader(['ko', 'en'], gpu=True)  # this needs to run only once t
 # https://gosmcom.tistory.com/143 : 로그인 처리 이름 불러오기
 # https://free-eunb.tistory.com/43 : 이미지 for 문처리
 
-# 템플릿테이블 가져오기
-def templateMenu(request):
-    template = Template.objects.all()
-    # print("abcd")
-    return render(request, 'templateMenu.html', {'templates': template})
 
-
-# def useTemplate(request, pk):
-#     # usetemplates = Template.objects\
-#     print('views.py/useTemplate()/request: {request}')
-#     print('views.py/useTemplate()/pk: ', pk)
-#     gettemplate = Template.objects.get(pk=pk)
-#
-#     return render(request, 'useTemplate.html', {'gettemplates': gettemplate}, pk)
-
-    # return render(request, 'useTemplate.html', {'usetemplate': usetemplates})
-
-
-def usetemplate(request, pk):
-    gettemplate = Template.objects.get(pk=pk)
-    return render(request, 'useTemplate.html', {'gettemplate': gettemplate})
-
-
-#그룹화하는 페이지로 넘어가는거
-def makeGroup(request):
-    results = Result.objects.all()
-    return render(request, 'makeGroup.html', {'results': results})
-
-#그룹화버튼 눌렀을때 작동하도록
-def Group(request):
-    global list
-    if request.method == 'POST':
-        selected_result = request.POST.getlist('selected_result')
-        print("그룹화", selected_result)
-        list = selected_result
-
-    return render(request, 'makeGroup.html', list)
-
-
-def pop(request):
-    return render(request, 'pop.html')
-
-
+# 첫 화면인 index 페이지 띄우는 거
+# 원래는 로그인 되면 상단 네이게이션바에 이름을 출력할려고 했었음
+# 필요없다면 그 부분은 추후에 삭제해도 됨
 def index(request):
     # return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.!")
     userstate = request.session.get('user')
@@ -76,6 +37,51 @@ def index(request):
 
     else:
         return render(request, 'realmainpage.html')
+
+
+# 템플릿 생성하기 페이지에서 사용
+# 이미지에서 추출된 값을 체크박스있는 테이블로 불러오기 위해서 result테이블 가져옴
+def maketemplate(request):
+    results = Result.objects.all()
+    return render(request, 'maketemplate.html', {'results': results})
+
+
+# '템플릿 사용하기' 버튼 누르면 나오는 페이지
+# 생성된 템플릿 목록 보여주기 위해서 Template테이블 불러옴
+def templateMenu(request):
+    template = Template.objects.all()
+    # print("abcd")
+    return render(request, 'templateMenu.html', {'templates': template})
+
+# 템플릿 목록에서 '사용'버튼 누르면 나오는 페이지
+# 목록에서 버튼 누를 때 id를 pk로 넘겨받음
+def usetemplate(request, pk):
+    gettemplate = Template.objects.get(pk=pk)
+    return render(request, 'useTemplate.html', {'gettemplate': gettemplate})
+
+
+# ----------------여기서부터는 아직 테스트 중인 애들임-------------------------------
+
+#'그룹화'버튼 누르면 나오는 페이지
+# 이 페이지는 테스트용임
+def makeGroup(request):
+    results = Result.objects.all()
+    return render(request, 'makeGroup.html', {'results': results})
+
+# '그룹화'버튼 눌렀을때 작동하도록
+# 이것도 아직 테스트 중인거
+def Group(request):
+    global list
+    if request.method == 'POST':
+        selected_result = request.POST.getlist('selected_result')
+        print("그룹화", selected_result)
+        list = selected_result
+
+    return render(request, 'makeGroup.html', list)
+
+#팝업창 띄우는거 테스트 중임
+def pop(request):
+    return render(request, 'pop.html')
 
 
 def use(request):
@@ -130,69 +136,6 @@ def use(request):
 
     imgList = Image.objects.filter(email=account.useremail)
     return render(request, 'use.html', {'imgList': imgList})
-
-
-def useTemplate(request):
-    # userstate = request.session.get('user')
-    # account = Account.objects.get(pk=userstate)
-    # name = {}
-    #
-    # if request.method == "POST":
-    #     img = request.FILES.get('image', None)
-    #
-    #     if not img:
-    #         return render(request, 'useTemplate.html', name)
-    #
-    #     else:
-    #         image = Image(
-    #             email=account.useremail,
-    #             image = img,
-    #         )
-    #
-    #         image.save()
-    #
-    #         img = cv2.imread('C:\\Users\\hufs_ice\\PycharmProjects\\DoCatch\\ERS-UI\media\\images\\ko1naver.com_serial14-2.jpg')
-    #         result = reader.readtext('C:\\Users\\hufs_ice\\PycharmProjects\\DoCatch\\ERS-UI\media\\images\\ko1naver.com_serial14-2.jpg')
-    #         # 왼쪽위, 왼쪽아래, 오른쪽아래, 오른쪽위
-    #         for i in range(len(result)):
-    #             if i == 0:
-    #                 print('[', result[i], ',')
-    #             elif i == len(result) - 1:
-    #                 print(result[i], ']')
-    #             else:
-    #                 print(result[i], ',')
-    #         i = 0
-    #         for (bbox, text, prob) in result:
-    #             i += 1
-    #             (tl, tr, br, bl) = bbox
-    #             tl = (int(tl[0]), int(tl[1]))
-    #             tr = (int(tr[0]), int(tr[1]))
-    #             br = (int(br[0]), int(br[1]))
-    #             bl = (int(bl[0]), int(bl[1]))
-    #
-    #             cv2.rectangle(img, tl, br, (0, 255, 0), 2)
-    #         cv2.imshow("Image", img)
-    #
-    # imgList = Image.objects.filter(email=account.useremail)
-    # return render(request, 'useTemplate.html', {'imgList':imgList})
-
-    # 이렇게 하면 페이지 연결은 됨
-    userstate = request.session.get('user')
-    name = {}
-
-    if userstate:  # 현재 로그인 상태이면! 이름을 출력할 수 있게끔
-        account = Account.objects.get(pk=userstate)
-        # name['name'] = '문진영'
-        name['name'] = account.username
-
-        return render(request, 'useTemplate.html', name)
-
-    else:
-        return render(request, 'useTemplate.html')
-
-
-def maketemplate(request):
-        return render(request, 'maketemplate.html')
 
 
 def click(request):

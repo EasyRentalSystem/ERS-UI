@@ -79,7 +79,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# 출처: https://www.morenice.kr/263 [morenice's blog]
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',

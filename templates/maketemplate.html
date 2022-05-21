@@ -17,13 +17,14 @@
 </head>
 
 <body>
+<!--위쪽만 있는 네이게이션바-->
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a href="{% url 'index' %}" class="navbar-brand ps-3"> Docatch </a>
-<!--    <a class="navbar-brand ps-3" href="index.html">Docatch</a>-->
+    <!--    <a class="navbar-brand ps-3" href="index.html">Docatch</a>-->
     <!-- Sidebar Toggle-->
     <div class="nav">
-<!--        <a class="nav-link" href="homepage.html">-->
+        <!--        <a class="nav-link" href="homepage.html">-->
         <a href="{% url 'index' %}" class="nav-link">
             <div class="sb-nav-link-icon"></div>
             Home
@@ -59,6 +60,7 @@
         </li>
     </ul>
 </nav>
+
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
@@ -81,7 +83,7 @@
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div style="text-align : center;">
-<!--                        <img src="{%static 'images/mylove.jpg' %}">-->
+                        <!--                        <img src="{%static 'images/mylove.jpg' %}">-->
                         {% load static %}
                         <img src="{% static 'assets/img/redbox.jpg' %}" alt="My Image" width="30"> : 자동인식
                         <img src="{% static 'assets/img/greenbox.jpg' %}" alt="My Image" width="30"> : 그룹부분
@@ -105,6 +107,7 @@
                 <div class="col-xl-4">
                     <div class="card mb-4">
                         <div class="card-header">
+<!--                            가운데있는 테이블-->
                             <i class="fas fa-table me-1"></i>
                             분석결과
                         </div>
@@ -112,12 +115,21 @@
                             <table id="datatablesSimple">
                                 <thead>
                                 <tr>
-                                    <th>index</th>
+                                    <th>인덱스</th>
                                     <th>열이름</th>
                                     <th>추출 값</th>
-                                    <th>영역선택</th>
+                                    <th>선택</th>
                                 </tr>
                                 </thead>
+<!--                                반복문으로 result테이블에 있는 id, result가져옴-->
+                                {% for result in results %}
+                                <td class="td_id">{{result.id}}</td>
+                                <td class="td_name"><input type="text" name="tdname"></td>
+                                <td class="td_result">{{result.result}}</td>
+<!--                                체크박스-->
+                                <td class="td_checkbox"><input id="selected_result" type="checkbox" name="selected_result" value="" ></td>
+                                </tr>
+                                {% endfor %}
                             </table>
                         </div>
                     </div>
@@ -129,14 +141,8 @@
                             사용테이블
                         </div>
                         <div class="card-body">
-                            <table id="datatablesSimple01">
-                                <thead>
-                                <tr>
-                                    <th>index</th>
-                                    <th>그룹</th>
-                                </tr>
-                                </thead>
-                            </table>
+<!--                            여기다 테이블 넣으면 됨-->
+
                         </div>
                     </div>
                 </div>
@@ -147,7 +153,7 @@
 
                     <button class ="uploadbutton">
                         <a href="{% url 'index' %}">
-                        이전 페이지
+                            이전 페이지
                         </a>
                     </button>
                 </div>
@@ -155,13 +161,13 @@
                     <nav>
                         <button type="button">
                             <a href="{% url 'makeGroup' %}">
-                            그룹화
+                                그룹화
                             </a>
                         </button>
 
                         <button type="button">
                             <a href="{% url 'index' %}">
-                            템플릿 생성
+                                템플릿 생성
                             </a>
                         </button>
                     </nav>
